@@ -1,3 +1,15 @@
+# AI-Powered OKR Assistant
+
+This project is an AI-powered assistant to help teams write and track their Objectives and Key Results (OKRs).
+
+## Deployment
+
+This project is live on Vercel.
+
+[![Deploy with Vercel](https://vercel.com/button)](https://pm-ai-rep-cdjj.vercel.app/)
+
+**Live URL:** [https://pm-ai-rep-cdjj.vercel.app/](https://pm-ai-rep-cdjj.vercel.app/)
+
 # React + TypeScript + Vite
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
