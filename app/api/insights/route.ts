@@ -5,6 +5,28 @@ const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 })
 
+function parseInsights(insightsString: string) {
+  const result = {
+    moodSummary: "",
+    risks: "",
+    practiceSuggestion: "",
+    coachingTip: "",
+  };
+  if (!insightsString) return result;
+
+  const moodMatch = insightsString.match(/Mood Summary:(.*?)(?:\n|$)/i);
+  const risksMatch = insightsString.match(/Detected Risks:(.*?)(?:\n|$)/i);
+  const practiceMatch = insightsString.match(/Practice Recommendation:(.*?)(?:\n|$)/i);
+  const tipMatch = insightsString.match(/Agile Coaching Tip:(.*?)(?:\n|$)/i);
+
+  result.moodSummary = moodMatch ? moodMatch[1].trim() : "";
+  result.risks = risksMatch ? risksMatch[1].trim() : "";
+  result.practiceSuggestion = practiceMatch ? practiceMatch[1].trim() : "";
+  result.coachingTip = tipMatch ? tipMatch[1].trim() : "";
+
+  return result;
+}
+
 export async function POST(req: Request) {
   const body = await req.json()
   const { mood, blockers, highlights, okrProgress } = body
@@ -34,7 +56,8 @@ Format it as clean, human-readable bullet points.
     })
 
     const reply = completion.choices[0]?.message?.content
-    return NextResponse.json({ insights: reply })
+    const insightsObject = parseInsights(reply || "")
+    return NextResponse.json({ insights: insightsObject })
   } catch (error) {
     console.error('Error calling OpenAI API:', error)
     return NextResponse.json(
